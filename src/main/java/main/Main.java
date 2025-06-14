@@ -24,6 +24,7 @@ public class Main {
         System.out.println(json);
         var data = dataConverter.dataConverter(json, DataTotal.class);
 
+        // Conseguir el top 10 de libros, directamente de la data obtenida
         /*
         data.booksList().stream()
                 .limit(10)
@@ -46,8 +47,7 @@ public class Main {
                                 dataBook.numberDownload(),
                                 dataBook.languages()
                         ))).collect(Collectors.toList());
-
-        // Extrae los datos de clase BookInfo para mostrar los libros mas descargados
+        // Extrae los datos de clase BookInfo para mostrar los libros mas descargados desde la clase creada
         System.out.println("\n=========== Top 15 de libros descargados ===========");
         books.stream()
                 .sorted(Comparator.comparing(BookInfo::getNumbreDownload).reversed())
@@ -59,9 +59,9 @@ public class Main {
         // Buscar un libro por su nombre
         System.out.print("\nIngrese el nombre del libro que desea buscar: ");
         String searchBook = lecture.nextLine();
-        json = bookApiClient.fetchBooks(URL_BASE + "?search=" + searchBook.replace(" ", "+"));
-        data = dataConverter.dataConverter(json, DataTotal.class);
-        Optional<DataBook> foundBooks = data.booksList().stream()
+        var jsonSearch = bookApiClient.fetchBooks(URL_BASE + "?search=" + searchBook.replace(" ", "+"));
+        var dataSearch = dataConverter.dataConverter(jsonSearch, DataTotal.class);
+        Optional<DataBook> foundBooks = dataSearch.booksList().stream()
                 .filter(book -> book.title().toLowerCase().contains(searchBook.toLowerCase()))
                 .findFirst();
         if (foundBooks.isPresent()){
